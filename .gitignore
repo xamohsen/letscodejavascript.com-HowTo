@@ -3,3 +3,6 @@
 
 #mac os x
 .DS_Store
+
+#npm
+node_modules/**/.bin/
