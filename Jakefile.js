@@ -2,14 +2,16 @@
     "use static";
 
     var jshint = require("simplebuild-jshint");
-    var karma = require("karma").server;
-    desc("Start the karma server");
+    var karma = require("simplebuild-karma");
+    var KARMA_CONFIG = "karma.conf.js"
+    desc("Start the karma server (run this first)");
     task("karma", function () {
         console.log("starting karma server");
         karma.start({
-            configFile: require('path').resolve('karma.conf.js')
+            configFile: KARMA_CONFIG
         }, complete, fail);
     }, {async: true});
+
 
 
     desc("default build");
@@ -46,5 +48,14 @@
         }, complete, fail);
         jake.exec("node node_modules/jshint/bin/jshint Jakefile.js", {interactive: true}, complete);
     }, {async: true});
-
+    desc("Run tests");
+    task("test", function() {
+        karma.run({
+            configFile: KARMA_CONFIG,
+            expectedBrowsers: [
+                "Chrome 42.0.2311 (Mac OS X 10.10.3)",
+                "Firefox 37.0.0 (Mac OS X 10.10)"
+            ]
+        }, complete, fail);
+    }, { async: true });
 }());
